@@ -7,27 +7,48 @@ from googleapiclient.discovery import build
 from dateutil import parser
 import datetime
 
-def service_google_calendar():
-    """Shows basic usage of the Google Calendar API.
-    """
-    creds = None
-    # The file token.json stores the user's access and refresh tokens and is
-    # created automatically when the authorization flow completes for the first
-    # time.
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                '/Users/tanakatouma/vscode/google-calendar/credentials_oauth.json', SCOPES)  # use the path to your credentials.json
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
+# If modifying these SCOPES, delete the file token.json.
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
-    # Call the Calendar API
+
+def service_google_calendar():
+    creds = None
+    flow = InstalledAppFlow.from_client_secrets_file(
+        '../credentials_oauth.json', SCOPES)
+    creds = flow.run_local_server(port=0)
+
     service = build('calendar', 'v3', credentials=creds)
     return service
+
+
+
+def get_events(start_date, end_date):
+    service = service_google_calendar()
+
+    timeMin = start_date.isoformat() + 'Z'
+    timeMax = end_date.isoformat() + 'Z'
+
+    print(f'Getting events from {start_date} to {end_date}')
+    events_result = service.events().list(
+        calendarId='primary', timeMin=timeMin, timeMax=timeMax,
+        maxResults=10, singleEvents=True,
+        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+
+    if not events:
+        print('No events found.')
+    data = {}
+    i = 0
+    for event in events:
+        i += 1
+        start_str = event['start'].get('dateTime', event['start'].get('date'))
+        end_str = event['end'].get('dateTime', event['end'].get('date'))
+        description = event.get('description', '')
+
+        start_dt = parser.parse(start_str)
+        end_dt = parser.parse(end_str)
+        time = end_dt - start_dt
+
+        data[i] = {'description': description, 'time' :time }
+
+    return data
