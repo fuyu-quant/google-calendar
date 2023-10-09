@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "google-calendar"
+version = "0.1.0"
+description = ""
+authors = ["toma tanaka <ulti4929@gmail.com>"]
+readme = "README.md"
+packages = [{include = "google_calendar"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+google-api-python-client = "^2.102.0"
+google-auth = "^2.23.2"
+oauthlib = "^3.2.2"
+google-auth-oauthlib = "^1.1.0"
+ipykernel = "^6.25.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
