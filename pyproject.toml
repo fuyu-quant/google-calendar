@@ -7,12 +7,17 @@ readme = "README.md"
 packages = [{include = "google_calendar"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-google-api-python-client = "^2.102.0"
-google-auth = "^2.23.2"
+python = "^3.9.0, <3.13.0"
+google-api-python-client = "1.7.2"
+google-auth = "1.8.0"
 oauthlib = "^3.2.2"
-google-auth-oauthlib = "^1.1.0"
+google-auth-oauthlib = "0.4.1"
+google-auth-httplib2 = "0.0.3"
 ipykernel = "^6.25.2"
+jupyter = "^1.0.0"
+notebook = "^7.0.4"
+pandas = "^2.1.1"
+numpy = "^1.26.0"
 
 
 [build-system]

@@ -17,3 +17,4 @@ services:
       - "127.0.0.1:8060:8060"
     volumes:
       - "../src/:/root/src/"
+      - "../credentials_oauth.json:/root/credentials_oauth.json"
